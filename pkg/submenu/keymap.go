@@ -1,17 +1,16 @@
-package terminal
+package submenu
 
 import "github.com/charmbracelet/bubbles/key"
 
 type keyMap struct {
-	Tab  key.Binding
-	Quit key.Binding
+	Enter key.Binding
+	Quit  key.Binding
 }
 
 var keys = func() keyMap {
 	return keyMap{
-		Tab: key.NewBinding(
-			key.WithKeys("tab"),
-			key.WithHelp("tab", "Switch tabs"),
+		Enter: key.NewBinding(
+			key.WithKeys("enter"),
 		),
 		Quit: key.NewBinding(
 			key.WithKeys("q"),
