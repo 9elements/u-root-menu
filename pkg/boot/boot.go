@@ -66,9 +66,20 @@ func Setup() *Model {
 
 	simpleList := list.NewSimpleAdapter(list.SimpleItemList{})
 	for _, img := range images {
+
+		var ImgDesc string
+
+		ImageString := img.String()
+		for _, line := range strings.Split(ImageString, "\n") {
+			fmt.Printf("%s\n", line)
+			if strings.Contains(line, "Kernel:") {
+				ImgDesc = strings.Replace(line, "Kernel: file://", "", 1)
+			}
+		}
+
 		simpleList.Append(list.SimpleItem{
 			Title:    img.Label(),
-			Desc:     img.Label(),
+			Desc:     ImgDesc,
 			Disabled: false,
 
 			Options:        []string{},
@@ -113,7 +124,15 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					break
 				}
 
-				fmt.Printf("Executing Image: %s\n", m.images[m.list.ItemFocus()].Label())
+				ImageString := m.images[m.list.ItemFocus()].String()
+				for _, line := range strings.Split(ImageString, "\n") {
+					fmt.Printf("%s\n", line)
+					if strings.Contains(line, "Kernel:") {
+						line = strings.Replace(line, "Kernel: file://", "", 1)
+						fmt.Printf("Executing Image: %s\n", line)
+					}
+				}
+
 				err = boot.Execute()
 				if err != nil {
 					fmt.Printf("Error executing image: %v", err)
